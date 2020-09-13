@@ -1,78 +1,146 @@
-# Gatsby Theme Document
+# gatsby-gitbook-starter
 
-Welcome to Document, a Gatsby.js theme by [Code Bushi](https://codebushi.com/gatsby-starters-and-themes/). Quickly and easily create documentation for anything using MDX or Markdown.
+Kick off your project with this starter to create a powerful/flexible docs/tutorial web apps.
 
-👀 [View the Live Demo](https://gatsby-theme-document.netlify.com/)
+![gatsby-gitbook-starter](https://graphql-engine-cdn.hasura.io/learn-hasura/gatsby-gitbook-starter/assets/documentation_app_blog.png)
 
-## Getting Started
+## Motivation
 
-Using the Gatsby CLI
+We wanted to create a [GraphQL tutorial](https://learn.hasura.io) series. The content would be written by developers for various languages/frameworks and what better than writing it in Markdown! And since this is a tutorial series we also needed rich embeds, syntax highlighting and more customisations.
 
-```bash
-gatsby new document-site https://github.com/codebushi/gatsby-theme-document-example
-cd document-site
-gatsby develop
+We also wanted to serve these tutorials in sub paths of [learn.hasura.io](https://learn.hasura.io). To serve all these requirements, we decided to use Gatsby + MDX (Markdown + JSX) to extend markdown and used a neat consistent theme like the one at [GitBook](https://www.gitbook.com) and deployed as docker containers.
+
+## 🔥 Features
+- Write using Markdown / [MDX](https://github.com/mdx-js/mdx)
+- GitBook style theme
+- Syntax Highlighting using Prism [`Bonus`: Code diff highlighting]
+- Search Integration with Algolia
+- Progressive Web App, Works Offline
+- Google Analytics Integration
+- Automatically generated sidebar navigation, table of contents, previous/next
+- Dark Mode toggle
+- Edit on Github
+- Fully customisable
+- Rich embeds and live code editor using MDX
+- Easy deployment: Deploy on Netlify / Now.sh / Docker
+
+## 🔗 Live Demo
+
+Here's a [live demo](https://learn.hasura.io/graphql/react)
+
+## 🚀 Quickstart
+
+Get started by running the following commands:
+
+```
+$ git clone git@github.com:hasura/gatsby-gitbook-starter.git
+$ cd gatsby-gitbook-starter
+$ npm install
+$ npm start
 ```
 
-Your new site will be up at http://localhost:8000
+Visit `http://localhost:8000/` to view the app.
 
-Try changing the logo by editing the file at `src/gatsby-theme-document/logo.mdx`.
+## 🔧 Configure
 
-## Adding Content
+Write markdown files in `content` folder.
 
-Document is built with [MDX](https://mdxjs.com/). Content can be added by creating or editing the MDX files in the content folder `content/index.mdx`.
+Open `config.js` for templating variables. Broadly configuration is available for `gatsby`, `header`, `sidebar` and `siteMetadata`.
 
-With MDX, you can add JSX or even React components to your markdown files. Images can also be added to any `.mdx` file, and will be automatically optimized using [gatsby-remark-images](https://www.gatsbyjs.org/packages/gatsby-remark-images/).
+- `gatsby` config for global configuration like 
+    - `pathPrefix` - Gatsby Path Prefix
+    - `siteUrl` - Gatsby Site URL
+    - `gaTrackingId` - Google Analytics Tracking ID
 
-### Left Sidebar
+- `header` config for site header configuration like
+    - `title` - The title that appears on the top left
+    - `githubUrl` - The Github URL for the docs website
+    - `helpUrl` - Help URL for pointing to resources
+    - `tweetText` - Tweet text
+    - `links` - Links on the top right
+    - `search` - Enable search and [configure Algolia](https://www.gatsbyjs.org/docs/adding-search-with-algolia/)
 
-The left sidebar navigation is automatically populated by the pages in the content folder. To sort the top level navigation, edit the `forcedNavOrder` option in the `gatsby-config.js` file.
+- `sidebar` config for navigation links configuration
+    - `forcedNavOrder` for left sidebar navigation order. It should be in the format "/<filename>"
+    - `frontLine` - whether to show a front line at the beginning of a nested menu.(Collapsing capability would be turned of if this option is set to true)
+    - `links` - Links on the bottom left of the sidebar
+    - `ignoreIndex` - Set this to true if the index.md file shouldn't appear on the left sidebar navigation. Typically this can be used for landing pages.
 
-The logo will link to the `index.mdx` page. To make the `index.mdx` page visible in the left navigation, set `ignoreIndex` to `false`.
+- `siteMetadata` config for website related configuration
+    - `title` - Title of the website
+    - `description` - Description of the website
+    - `ogImage` - Social Media share og:image tag
+    - `docsLocation` - The Github URL for Edit on Github
 
-Sub navigation items are created by making a folder with the same name as the top level `.mdx` file. The sub navigation is ordered alphabetically.
+- For sub nesting in left sidebar, create a folder with the same name as the top level `.md` filename and the sub navigation is auto-generated. The sub navigation is alphabetically ordered.
 
-### Right Sidebar
+### Algolia Configuration
 
-The contents of the right sidebar will be automatically populated by any heading tags `h1, h2, h3, etc.` that are added to the page. They will anchor link to the corresponding heading.
+To setup Algolia, go to `config.js` and update the `search` object to look like the one below:
 
-## Theme Colors
-
-Document is also built with [Theme UI](https://theme-ui.com). The icon in the top right of the site will cycle through the various color modes that are available.
-
-To edit or add colors modes, edit the file at `src/gatsby-plugin-theme-ui/colors.js`. To learn more about color modes, check out the [Theme UI docs](https://theme-ui.com/color-modes).
-
-The contents of the MDX files are also styled with Theme UI and can be edited at `src/gatsby-plugin-theme-ui/index.js`. The styles for the heading tags are found at `src/gatsby-plugin-theme-ui/headingsjs`. Learn more about [styling MDX](https://theme-ui.com/styling-mdx) from the Theme UI docs.
-
-## Syntax Colors
-
-Document uses [@theme-ui/prism](https://theme-ui.com/prism) for syntax highlighting. Different presets can be used by editing the file at `src/gatsby-plugin-theme-ui/index.js`. The desired preset must be included at the top of the file and spread into the `pre` styles
-
-```javascript
-import dracula from '@theme-ui/prism/presets/dracula.json';
-
-styles: {
-  pre: {
-    ...dracula,
-  }
-}
+```...,
+	"search": {
+		"enabled": true,
+		"indexName": "MY_INDEX_NAME",
+		"algoliaAppId": process.env.GATSBY_ALGOLIA_APP_ID,
+		"algoliaSearchKey": process.env.GATSBY_ALGOLIA_SEARCH_KEY,
+		"algoliaAdminKey": process.env.ALGOLIA_ADMIN_KEY
+	},
 ```
 
-The code blocks will not change color based on the color modes. For a complete list of all available prism presets, check out the Theme UI [syntax themes](https://theme-ui.com/prism#syntax-themes).
+Values for Algolia App ID, Search Key, and Admin Key can be obtained from Algolia Dashboard with the right set of permissions. Replace `MY_INDEX_NAME` with the Algolia Index name of your choice. To build the Algolia index, you need to run `npm run build` which will do a gatsby build along with content indexing in Algolia.
 
-## Social Media Icons
+### Progressive Web App, Offline
 
-The social media icons in the header can be edited in the `gatsby-config.js` file, under social. Currently, you can only add Twitter and Github links.
+To enable PWA, go to `config.js` and update the `pwa` object to look like the one below:
 
-## SEO, Site Image, and Manifest Icons
+```
+   "pwa": {
+        "enabled": false, // disabling this will also remove the existing service worker.
+        "manifest": {
+            "name": "Gatsby Gitbook Starter",
+            "short_name": "GitbookStarter",
+            "start_url": "/",
+            "background_color": "#6b37bf",
+            "theme_color": "#6b37bf",
+            "display": "standalone",
+            "crossOrigin": "use-credentials",
+            icons: [
+                {
+                    src: "src/pwa-512.png",
+                    sizes: `512x512`,
+                    type: `image/png`,
+                },
+            ],
+        },
+    }
+```
 
-Document uses React Helmet to add meta tags to the website's `<head>` tag. When adding/editing a file in the content folder, be sure to include the Title and Description in the frontmatter. These are automatically used to generate the title and description meta tags for the page.
+## Live Code Editor
 
-```md
+To render react components for live editing, add the `react-live=true` to the code section. For example:
+
+```javascript react-live=true
+<button>Edit my text</button>
+```
+
+In the above code, just add `javascript react-live=true` after the triple quote ``` to start rendering react components that can be edited by users.
+
+## 🤖 SEO friendly
+
+This is a static site and comes with all the SEO benefits. Configure meta tags like title and description for each markdown file using MDX Frontmatter
+
+```markdown
 ---
-title: "Document by Code Bushi"
-description: "This is the meta description"
+title: "Title of the page"
+metaTitle: "Meta Title Tag for this page"
+metaDescription: "Meta Description Tag for this page"
 ---
 ```
 
-There is also an image at `src/site-image.jpg` which is used for the Open Graph image tag, as well as the Twitter card. Another image at `src/site-icon.png` is used by the [gatsby-plugin-manifest](https://www.gatsbyjs.org/packages/gatsby-plugin-manifest/) to generate a Favicon and other device icons.
+Canonical URLs are generated automatically.
+
+## ☁️ Deploy
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/hasura/gatsby-gitbook-starter)
+
